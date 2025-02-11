@@ -1,7 +1,6 @@
 import streamlit as st
-from google.analytics.data_v1beta import BetaMetricsServiceAsyncClient
+import google.analytics.data_v1beta as data_v1beta
 from google.oauth2 import service_account
-import asyncio
 
 # Replace with the path to your credentials JSON file
 credentials_file = "credentials.json"
@@ -10,22 +9,20 @@ credentials_file = "credentials.json"
 property_id = "475812416"
 
 # Create a service client
-credentials = service_account.Credentials.from_file(credentials_file)
-client = BetaMetricsServiceAsyncClient(credentials=credentials)
+credentials = service_account.Credentials.from_service_account_file(credentials_file)
+client = data_v1beta.BetaAnalyticsDataClient(credentials=credentials)
 
 # Create a request
-request = BetaMetricsServiceAsyncClient.RunReportRequest(
+request = data_v1beta.RunReportRequest(
     property="properties/" + property_id,
     dimensions=[
-        BetaMetricsServiceAsyncClient.Dimension(name="date"),
-        BetaMetricsServiceAsyncClient.Dimension(name="country"),
-    ],
-    metrics=[
-        BetaMetricsServiceAsyncClient.Metric(name="activeUsers"),
-    ],
-    date_ranges=[
-        BetaMetricsServiceAsyncClient.DateRange(start_date="2023-01-01", end_date="2023-01-31"),
-    ],
+        data_v1beta.Dimension(
+            name="city"
+        ),
+        data_v1beta.Dimension(
+            name="country"
+        )
+    ]
 )
 
 
@@ -38,5 +35,6 @@ async def make_request():
 response = make_request()
 
 # Print the results
+st.write(response)
 for row in response.rows:
     st.write(row.dimension_values[0].value, row.dimension_values[1].value, row.metric_values[0].value)
