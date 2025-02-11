@@ -1,12 +1,13 @@
+import streamlit as st
 from google.analytics.data_v1beta import BetaMetricsServiceAsyncClient
 from google.oauth2 import service_account
 import asyncio
 
 # Replace with the path to your credentials JSON file
-credentials_file = "path/to/your/credentials.json"
+credentials_file = "credentials.json"
 
 # Replace with your Google Analytics property ID
-property_id = "your_property_id"
+property_id = "475812416"
 
 # Create a service client
 credentials = service_account.Credentials.from_file(credentials_file)
@@ -38,4 +39,4 @@ response = make_request()
 
 # Print the results
 for row in response.rows:
-    print(row.dimension_values[0].value, row.dimension_values[1].value, row.metric_values[0].value)
+    st.write(row.dimension_values[0].value, row.dimension_values[1].value, row.metric_values[0].value)
