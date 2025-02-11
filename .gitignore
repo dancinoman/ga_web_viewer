@@ -171,4 +171,4 @@ cython_debug/
 .pypirc
 
 # credentials file is sensitive and should not be in version control
-credential.json
+credentials.json
